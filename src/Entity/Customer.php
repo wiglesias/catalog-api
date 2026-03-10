@@ -31,11 +31,11 @@ class Customer
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['customer:read'])]
+    #[Groups(['customer:read','catalog:read','product:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['customer:read','customer:write'])]
+    #[Groups(['customer:read','customer:write','catalog:read'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255, unique: true)]

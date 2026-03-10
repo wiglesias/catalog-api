@@ -29,15 +29,15 @@ class Article
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['article:read'])]
+    #[Groups(['article:read','product:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255, unique: true)]
-    #[Groups(['article:read','article:write'])]
+    #[Groups(['article:read','article:write','product:read'])]
     private ?string $code = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['article:read','article:write'])]
+    #[Groups(['article:read','article:write','product:read'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 10)]

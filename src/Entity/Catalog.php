@@ -45,6 +45,7 @@ class Catalog
      * @var Collection<int, CatalogPresentation>
      */
     #[ORM\OneToMany(targetEntity: CatalogPresentation::class, mappedBy: 'catalog')]
+    #[Groups(['catalog:read'])]
     private Collection $products;
 
     public function __construct()

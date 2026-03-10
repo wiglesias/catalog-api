@@ -64,7 +64,8 @@ class CatalogPresentation
     #[Groups(['product:read','product:write'])]
     private ?bool $active = true;
 
-    #[ORM\ManyToOne(targetEntity: CatalogCategory::class)]
+    #[ORM\ManyToOne(targetEntity: CatalogCategory::class, inversedBy: 'products')]
+    #[Groups(['product:read','product:write'])]
     private ?CatalogCategory $category = null;
 
     /**
@@ -73,6 +74,9 @@ class CatalogPresentation
     #[ORM\OneToMany(targetEntity: PresentationAttributeValue::class, mappedBy: 'product', cascade: ['persist', 'remove'], orphanRemoval: true)]
     #[Groups(['product:read','product:write'])]
     private Collection $attributeValues;
+
+    #[ORM\ManyToOne(inversedBy: 'products')]
+    private ?CatalogCategory $catalogCategory = null;
 
     public function __construct()
     {
@@ -225,6 +229,18 @@ class CatalogPresentation
                 $value->setProduct(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCatalogCategory(): ?CatalogCategory
+    {
+        return $this->catalogCategory;
+    }
+
+    public function setCatalogCategory(?CatalogCategory $catalogCategory): static
+    {
+        $this->catalogCategory = $catalogCategory;
 
         return $this;
     }
