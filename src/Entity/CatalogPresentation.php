@@ -41,6 +41,9 @@ class CatalogPresentation
     #[ORM\Column]
     private ?bool $active = null;
 
+    #[ORM\ManyToOne(targetEntity: CatalogCategory::class)]
+    private ?CatalogCategory $category = null;
+
     public function __construct()
     {
         $this->components = new ArrayCollection();
@@ -149,6 +152,18 @@ class CatalogPresentation
     public function setActive(bool $active): static
     {
         $this->active = $active;
+
+        return $this;
+    }
+
+    public function getCategory(): ?CatalogCategory
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?CatalogCategory $category): static
+    {
+        $this->category = $category;
 
         return $this;
     }
