@@ -67,9 +67,16 @@ class CatalogPresentation
     #[ORM\ManyToOne(targetEntity: CatalogCategory::class)]
     private ?CatalogCategory $category = null;
 
+    /**
+     * @var Collection<int, PresentationAttributeValue>
+     */
+    #[ORM\OneToMany(targetEntity: PresentationAttributeValue::class, mappedBy: 'product', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    private Collection $attributeValues;
+
     public function __construct()
     {
         $this->components = new ArrayCollection();
+        $this->attributeValues = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -187,6 +194,36 @@ class CatalogPresentation
     public function setCategory(?CatalogCategory $category): static
     {
         $this->category = $category;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PresentationAttributeValue>
+     */
+    public function getAttributeValues(): Collection
+    {
+        return $this->attributeValues;
+    }
+
+    public function addAttributeValue(PresentationAttributeValue $value): static
+    {
+        if (!$this->attributeValues->contains($value)) {
+            $this->attributeValues->add($value);
+            $value->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAttributeValue(PresentationAttributeValue $value): static
+    {
+        if ($this->attributeValues->removeElement($value)) {
+            // set the owning side to null (unless already changed)
+            if ($value->getProduct() === $this) {
+                $value->setProduct(null);
+            }
+        }
 
         return $this;
     }

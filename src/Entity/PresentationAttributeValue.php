@@ -29,6 +29,9 @@ class PresentationAttributeValue
     #[Groups(['product:read','product:write'])]
     private ?string $value = null;
 
+    #[ORM\ManyToOne(inversedBy: 'attributeValues')]
+    private ?CatalogPresentation $catalogPresentation = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -66,6 +69,18 @@ class PresentationAttributeValue
     public function setValue(?string $value): static
     {
         $this->value = $value;
+
+        return $this;
+    }
+
+    public function getCatalogPresentation(): ?CatalogPresentation
+    {
+        return $this->catalogPresentation;
+    }
+
+    public function setCatalogPresentation(?CatalogPresentation $catalogPresentation): static
+    {
+        $this->catalogPresentation = $catalogPresentation;
 
         return $this;
     }
