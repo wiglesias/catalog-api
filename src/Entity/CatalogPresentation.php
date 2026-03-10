@@ -5,9 +5,11 @@ namespace App\Entity;
 use App\Repository\CatalogPresentationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CatalogPresentationRepository::class)]
+#[ORM\Table(name: "catalog_presentation")]
 class CatalogPresentation
 {
     #[ORM\Id]
@@ -24,14 +26,20 @@ class CatalogPresentation
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $version = null;
+    #[ORM\Column(type: Types::INTEGER)]
+    private ?int $version = 1;
 
     /**
      * @var Collection<int, CatalogPresentationComponent>
      */
-    #[ORM\OneToMany(targetEntity: CatalogPresentationComponent::class, mappedBy: 'product')]
+    #[ORM\OneToMany(targetEntity: CatalogPresentationComponent::class, mappedBy: 'product', cascade: ['persist'])]
     private Collection $components;
+
+    #[ORM\ManyToOne(inversedBy: 'products')]
+    private ?Catalog $catalog = null;
+
+    #[ORM\Column]
+    private ?bool $active = null;
 
     public function __construct()
     {
@@ -79,12 +87,12 @@ class CatalogPresentation
         return $this;
     }
 
-    public function getVersion(): ?string
+    public function getVersion(): ?int
     {
         return $this->version;
     }
 
-    public function setVersion(?string $version): static
+    public function setVersion(?int $version): static
     {
         $this->version = $version;
 
@@ -117,6 +125,30 @@ class CatalogPresentation
                 $component->setProduct(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCatalog(): ?Catalog
+    {
+        return $this->catalog;
+    }
+
+    public function setCatalog(?Catalog $catalog): static
+    {
+        $this->catalog = $catalog;
+
+        return $this;
+    }
+
+    public function isActive(): ?bool
+    {
+        return $this->active;
+    }
+
+    public function setActive(bool $active): static
+    {
+        $this->active = $active;
 
         return $this;
     }

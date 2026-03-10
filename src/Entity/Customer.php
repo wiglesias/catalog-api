@@ -10,6 +10,7 @@ use Gedmo\Blameable\Traits\BlameableEntity;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 #[ORM\Entity(repositoryClass: CustomerRepository::class)]
+#[ORM\Table(name: 'customer')]
 class Customer
 {
     use TimestampableEntity;
@@ -27,14 +28,17 @@ class Customer
     private ?string $slug = null;
 
     /**
-     * @var Collection<int, CatalogPresentation>
+     * @var Collection<int, Catalog>
      */
-    #[ORM\OneToMany(targetEntity: CatalogPresentation::class, mappedBy: 'customer')]
-    private Collection $products;
+    #[ORM\OneToMany(targetEntity: Catalog::class, mappedBy: 'customer')]
+    private Collection $catalogs;
+
+    #[ORM\Column]
+    private ?bool $active = true;
 
     public function __construct()
     {
-        $this->products = new ArrayCollection();
+        $this->catalogs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -67,31 +71,43 @@ class Customer
     }
 
     /**
-     * @return Collection<int, CatalogPresentation>
+     * @return Collection<int, Catalog>
      */
-    public function getProducts(): Collection
+    public function getCatalogs(): Collection
     {
-        return $this->products;
+        return $this->catalogs;
     }
 
-    public function addCode(CatalogPresentation $product): static
+    public function addCatalog(Catalog $catalog): static
     {
-        if (!$this->products->contains($product)) {
-            $this->products->add($product);
-            $product->setCustomer($this);
+        if (!$this->catalogs->contains($catalog)) {
+            $this->catalogs->add($catalog);
+            $catalog->setCustomer($this);
         }
 
         return $this;
     }
 
-    public function removeCode(CatalogPresentation $product): static
+    public function removeCatalog(Catalog $catalog): static
     {
-        if ($this->products->removeElement($product)) {
+        if ($this->catalogs->removeElement($catalog)) {
             // set the owning side to null (unless already changed)
-            if ($product->getCustomer() === $this) {
-                $product->setCustomer(null);
+            if ($catalog->getCustomer() === $this) {
+                $catalog->setCustomer(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isActive(): ?bool
+    {
+        return $this->active;
+    }
+
+    public function setActive(bool $active): static
+    {
+        $this->active = $active;
 
         return $this;
     }

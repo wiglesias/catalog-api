@@ -8,6 +8,7 @@ use Gedmo\Blameable\Traits\BlameableEntity;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 #[ORM\Entity(repositoryClass: ArticleRepository::class)]
+#[ORM\Table(name: "article")]
 class Article
 {
     use TimestampableEntity;
@@ -26,6 +27,12 @@ class Article
 
     #[ORM\Column(length: 10)]
     private ?string $unit = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $type = null;
+
+    #[ORM\Column]
+    private ?bool $active = true;
 
     public function getId(): ?int
     {
@@ -64,6 +71,30 @@ class Article
     public function setUnit(string $unit): static
     {
         $this->unit = $unit;
+
+        return $this;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): static
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    public function isActive(): ?bool
+    {
+        return $this->active;
+    }
+
+    public function setActive(bool $active): static
+    {
+        $this->active = $active;
 
         return $this;
     }

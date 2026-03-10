@@ -3,9 +3,11 @@
 namespace App\Entity;
 
 use App\Repository\CatalogPresentationComponentRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CatalogPresentationComponentRepository::class)]
+#[ORM\Table(name: "catalog_presentation_component")]
 class CatalogPresentationComponent
 {
     #[ORM\Id]
@@ -19,11 +21,14 @@ class CatalogPresentationComponent
     #[ORM\ManyToOne(targetEntity: Article::class)]
     private ?Article $article = null;
 
-    #[ORM\Column]
+    #[ORM\Column(type: Types::FLOAT, precision: 10, scale: 4)]
     private ?float $quantity = null;
 
     #[ORM\Column(length: 10)]
     private ?string $unit = null;
+
+    #[ORM\Column(type: Types::INTEGER)]
+    private ?int $position = 0;
 
     public function getId(): ?int
     {
@@ -74,6 +79,18 @@ class CatalogPresentationComponent
     public function setUnit(string $unit): static
     {
         $this->unit = $unit;
+
+        return $this;
+    }
+
+    public function getPosition(): ?int
+    {
+        return $this->position;
+    }
+
+    public function setPosition(int $position): static
+    {
+        $this->position = $position;
 
         return $this;
     }
