@@ -2,9 +2,12 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
 use App\Repository\PresentationImageRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
+#[ApiResource]
 #[ORM\Entity(repositoryClass: PresentationImageRepository::class)]
 #[ORM\Table(name: "presentation_image")]
 class PresentationImage
@@ -12,15 +15,19 @@ class PresentationImage
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['product:read'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne]
+    #[Groups(['product:write'])]
     private ?CatalogPresentation $product = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['product:read','product:write'])]
     private ?string $path = null;
 
     #[ORM\Column]
+    #[Groups(['product:read','product:write'])]
     private ?int $position = 0;
 
     public function getId(): ?int

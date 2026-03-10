@@ -2,11 +2,23 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiResource;
 use App\Repository\CatalogRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
+#[ApiResource(
+    normalizationContext: ['groups' => ['catalog:read']],
+    denormalizationContext: ['groups' => ['catalog:write']]
+)]
+#[ApiFilter(SearchFilter::class, properties: [
+    'customer.slug' => 'exact',
+    'name' => 'partial'
+])]
 #[ORM\Entity(repositoryClass: CatalogRepository::class)]
 #[ORM\Table(name: "catalog")]
 class Catalog
@@ -14,15 +26,19 @@ class Catalog
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['catalog:read','product:read'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'catalogs')]
+    #[Groups(['catalog:read','catalog:write'])]
     private ?Customer $customer = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['catalog:read','catalog:write','product:read'])]
     private ?string $name = null;
 
     #[ORM\Column]
+    #[Groups(['catalog:read','catalog:write'])]
     private ?bool $active = true;
 
     /**

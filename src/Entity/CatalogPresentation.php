@@ -2,12 +2,26 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiResource;
 use App\Repository\CatalogPresentationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
+#[ApiResource(
+    normalizationContext: ['groups' => ['product:read']],
+    denormalizationContext: ['groups' => ['product:write']]
+)]
+#[ApiFilter(SearchFilter::class, properties: [
+    'code' => 'partial',
+    'name' => 'partial',
+    'catalog.id' => 'exact',
+    'customer.slug' => 'exact'
+])]
 #[ORM\Entity(repositoryClass: CatalogPresentationRepository::class)]
 #[ORM\Table(name: "catalog_presentation")]
 class CatalogPresentation
@@ -15,30 +29,38 @@ class CatalogPresentation
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['product:read'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(targetEntity: Customer::class, inversedBy: 'products')]
+    #[Groups(['product:read','product:write'])]
     private ?Customer $customer = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['product:read','product:write'])]
     private ?string $code = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['product:read','product:write'])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::INTEGER)]
+    #[Groups(['product:read'])]
     private ?int $version = 1;
 
     /**
      * @var Collection<int, CatalogPresentationComponent>
      */
     #[ORM\OneToMany(targetEntity: CatalogPresentationComponent::class, mappedBy: 'product', cascade: ['persist'])]
+    #[Groups(['product:read','product:write'])]
     private Collection $components;
 
     #[ORM\ManyToOne(inversedBy: 'products')]
+    #[Groups(['product:read','product:write'])]
     private ?Catalog $catalog = null;
 
     #[ORM\Column]
+    #[Groups(['product:read','product:write'])]
     private ?bool $active = null;
 
     #[ORM\ManyToOne(targetEntity: CatalogCategory::class)]

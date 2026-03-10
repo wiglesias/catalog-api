@@ -2,10 +2,13 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
 use App\Repository\CatalogPresentationComponentRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
+#[ApiResource]
 #[ORM\Entity(repositoryClass: CatalogPresentationComponentRepository::class)]
 #[ORM\Table(name: "catalog_presentation_component")]
 class CatalogPresentationComponent
@@ -13,21 +16,27 @@ class CatalogPresentationComponent
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['product:read'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(targetEntity: CatalogPresentation::class, inversedBy: 'components')]
+    #[Groups(['product:write'])]
     private ?CatalogPresentation $product = null;
 
     #[ORM\ManyToOne(targetEntity: Article::class)]
+    #[Groups(['product:read','product:write'])]
     private ?Article $article = null;
 
     #[ORM\Column(type: Types::FLOAT, precision: 10, scale: 4)]
+    #[Groups(['product:read','product:write'])]
     private ?float $quantity = null;
 
     #[ORM\Column(length: 10)]
+    #[Groups(['product:read','product:write'])]
     private ?string $unit = null;
 
     #[ORM\Column(type: Types::INTEGER)]
+    #[Groups(['product:read','product:write'])]
     private ?int $position = 0;
 
     public function getId(): ?int
