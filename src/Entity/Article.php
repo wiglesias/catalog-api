@@ -2,11 +2,23 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiResource;
 use App\Repository\ArticleRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Blameable\Traits\BlameableEntity;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Symfony\Component\Serializer\Attribute\Groups;
 
+#[ApiResource(
+    normalizationContext: ['groups' => ['article:read']],
+    denormalizationContext: ['groups' => ['article:write']]
+)]
+#[ApiFilter(SearchFilter::class, properties: [
+    'code' => 'partial',
+    'name' => 'partial'
+])]
 #[ORM\Entity(repositoryClass: ArticleRepository::class)]
 #[ORM\Table(name: "article")]
 class Article
@@ -17,18 +29,23 @@ class Article
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['article:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255, unique: true)]
+    #[Groups(['article:read','article:write'])]
     private ?string $code = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['article:read','article:write'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 10)]
+    #[Groups(['article:read','article:write'])]
     private ?string $unit = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['article:read','article:write'])]
     private ?string $type = null;
 
     #[ORM\Column]
@@ -97,5 +114,10 @@ class Article
         $this->active = $active;
 
         return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->code.' - '.$this->name ?? '---';
     }
 }

@@ -2,13 +2,25 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 use App\Repository\CustomerRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Blameable\Traits\BlameableEntity;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Symfony\Component\Serializer\Attribute\Groups;
 
+#[ApiResource(
+    operations: [
+        new Get(),
+        new GetCollection()
+    ],
+    normalizationContext: ['groups' => ['customer:read']],
+    denormalizationContext: ['groups' => ['customer:write']]
+)]
 #[ORM\Entity(repositoryClass: CustomerRepository::class)]
 #[ORM\Table(name: 'customer')]
 class Customer
@@ -19,21 +31,26 @@ class Customer
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['customer:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['customer:read','customer:write'])]
     private ?string $name = null;
 
     #[ORM\Column(length: 255, unique: true)]
+    #[Groups(['customer:read','customer:write'])]
     private ?string $slug = null;
 
     /**
      * @var Collection<int, Catalog>
      */
     #[ORM\OneToMany(targetEntity: Catalog::class, mappedBy: 'customer')]
+    #[Groups(['customer:read'])]
     private Collection $catalogs;
 
     #[ORM\Column]
+    #[Groups(['customer:read','customer:write'])]
     private ?bool $active = true;
 
     public function __construct()
@@ -110,5 +127,10 @@ class Customer
         $this->active = $active;
 
         return $this;
+    }
+
+    public function __toString(): string
+    {
+        return $this->name ?? '---';
     }
 }
