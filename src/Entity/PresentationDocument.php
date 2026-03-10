@@ -21,7 +21,7 @@ class PresentationDocument
     private ?string $file = null;
 
     #[ORM\Column(length: 50)]
-    private ?string $ty�pe = null;
+    private ?string $type = null;
 
     public function getId(): ?int
     {
@@ -52,14 +52,14 @@ class PresentationDocument
         return $this;
     }
 
-    public function getTy�pe(): ?string
+    public function getType(): ?string
     {
-        return $this->ty�pe;
+        return $this->type;
     }
 
-    public function setTy�pe(string $ty�pe): static
+    public function setType(string $ty�pe): static
     {
-        $this->ty�pe = $ty�pe;
+        $this->type = $ty�pe;
 
         return $this;
     }
