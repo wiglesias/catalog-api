@@ -56,5 +56,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::section('Attributes');
         yield MenuItem::linkTo(PresentationAttributeCrudController::class, 'Presentation Attributes', 'fa fa-tags')->setAction(Crud::PAGE_INDEX);
         yield MenuItem::linkTo(PresentationAttributeValueCrudController::class, 'Attribute Values', 'fa fa-list-alt')->setAction(Crud::PAGE_INDEX);
+        yield MenuItem::section('Catalog Categories');
+        yield MenuItem::linkTo(CatalogCategoryCrudController::class,'Categories', 'fa fa-tags');
     }
 }
