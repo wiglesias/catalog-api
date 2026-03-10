@@ -3,10 +3,12 @@
 namespace App\Controller\Admin;
 
 use App\Entity\CatalogPresentation;
+use App\Form\PresentationAttributeValueType;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
@@ -28,6 +30,7 @@ class CatalogPresentationCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
+        yield FormField::addColumn(6);
         yield TextField::new('code');
         yield TextField::new('name');
         yield AssociationField::new('customer');
@@ -37,6 +40,16 @@ class CatalogPresentationCrudController extends AbstractCrudController
             ->setEntryIsComplex(true)
             ->allowAdd()
             ->allowDelete()
+        ;
+        yield FormField::addColumn(6);
+        yield CollectionField::new('attributeValues')
+            ->setEntryType(PresentationAttributeValueType::class)
+            ->allowAdd()
+            ->allowDelete()
+            ->setFormTypeOptions([
+                'by_reference' => false,
+            ])
+            ->setLabel('Attribute')
         ;
     }
 }

@@ -51,7 +51,7 @@ class CatalogPresentation
     /**
      * @var Collection<int, CatalogPresentationComponent>
      */
-    #[ORM\OneToMany(targetEntity: CatalogPresentationComponent::class, mappedBy: 'product', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(targetEntity: CatalogPresentationComponent::class, mappedBy: 'product', cascade: ['persist', 'remove'], orphanRemoval: true)]
     #[ORM\OrderBy(['position' => 'ASC'])]
     #[Groups(['product:read','product:write'])]
     private Collection $components;
@@ -71,6 +71,7 @@ class CatalogPresentation
      * @var Collection<int, PresentationAttributeValue>
      */
     #[ORM\OneToMany(targetEntity: PresentationAttributeValue::class, mappedBy: 'product', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[Groups(['product:read','product:write'])]
     private Collection $attributeValues;
 
     public function __construct()
