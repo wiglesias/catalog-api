@@ -51,7 +51,8 @@ class CatalogPresentation
     /**
      * @var Collection<int, CatalogPresentationComponent>
      */
-    #[ORM\OneToMany(targetEntity: CatalogPresentationComponent::class, mappedBy: 'product', cascade: ['persist'])]
+    #[ORM\OneToMany(targetEntity: CatalogPresentationComponent::class, mappedBy: 'product', cascade: ['persist', 'remove'])]
+    #[ORM\OrderBy(['position' => 'ASC'])]
     #[Groups(['product:read','product:write'])]
     private Collection $components;
 

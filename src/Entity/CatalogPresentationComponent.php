@@ -6,6 +6,7 @@ use ApiPlatform\Metadata\ApiResource;
 use App\Repository\CatalogPresentationComponentRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ApiResource]
@@ -35,6 +36,7 @@ class CatalogPresentationComponent
     #[Groups(['product:read','product:write'])]
     private ?string $unit = null;
 
+    #[Gedmo\SortablePosition]
     #[ORM\Column(type: Types::INTEGER)]
     #[Groups(['product:read','product:write'])]
     private ?int $position = 0;
