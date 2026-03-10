@@ -5,6 +5,7 @@ namespace App\Controller\Admin;
 use App\Entity\CatalogCategory;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\SlugField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
@@ -23,9 +24,12 @@ class CatalogCategoryCrudController extends AbstractCrudController
             AssociationField::new('catalog'),
             TextField::new('name'),
             SlugField::new('slug')->setTargetFieldName('name'),
-            AssociationField::new('parent')->setFormTypeOptions([
+            AssociationField::new('parent')
+                ->autocomplete()
+                ->setFormTypeOptions([
                 'required' => false,
             ]),
+            BooleanField::new('active'),
         ];
     }
 }

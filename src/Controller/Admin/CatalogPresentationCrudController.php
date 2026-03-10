@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\CatalogPresentation;
 use App\Form\PresentationAttributeValueType;
+use Doctrine\ORM\QueryBuilder;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
@@ -35,7 +36,10 @@ class CatalogPresentationCrudController extends AbstractCrudController
         yield TextField::new('code');
         yield TextField::new('name');
         yield AssociationField::new('customer');
-        yield AssociationField::new('catalog');
+        yield AssociationField::new('catalog')
+            ->autocomplete();
+        yield AssociationField::new('category')
+            ->autocomplete();
         yield CollectionField::new('components')
             ->useEntryCrudForm()
             ->setEntryIsComplex(true)

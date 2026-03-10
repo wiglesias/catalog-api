@@ -20,8 +20,10 @@ class CatalogPresentationComponentCrudController extends AbstractCrudController
 
     public function configureFields(string $pageName): iterable
     {
-        yield AssociationField::new('article')->autocomplete();
-        yield NumberField::new('quantity');
+        yield AssociationField::new('article')
+            ->autocomplete();
+        yield NumberField::new('quantity')
+            ->setNumDecimals(4);
         yield TextField::new('unit');
         yield IntegerField::new('position');
     }
