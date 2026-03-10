@@ -62,7 +62,7 @@ class CatalogPresentation
 
     #[ORM\Column]
     #[Groups(['product:read','product:write'])]
-    private ?bool $active = null;
+    private ?bool $active = true;
 
     #[ORM\ManyToOne(targetEntity: CatalogCategory::class)]
     private ?CatalogCategory $category = null;
