@@ -105,4 +105,14 @@ class CatalogPresentationComponent
 
         return $this;
     }
+
+    public function __toString(): string
+    {
+        $code = $this->article?->getCode() ?? '';
+        $name = $this->article?->getName() ?? '';
+        $quantity = $this->quantity ?? 0;
+        $unit = $this->unit ?? '';
+
+        return sprintf('%s - %s - %s - %s', $code, $name, $quantity, $unit);
+    }
 }
