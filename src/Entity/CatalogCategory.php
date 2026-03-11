@@ -66,7 +66,7 @@ class CatalogCategory
     /**
      * @var Collection<int, CatalogPresentation>
      */
-    #[ORM\OneToMany(targetEntity: CatalogPresentation::class, mappedBy: 'catalogCategory')]
+    #[ORM\OneToMany(targetEntity: CatalogPresentation::class, mappedBy: 'category')]
     private Collection $products;
 
     public function __construct()

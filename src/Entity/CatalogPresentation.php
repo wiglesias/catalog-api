@@ -32,10 +32,6 @@ class CatalogPresentation
     #[Groups(['product:read'])]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: Customer::class, inversedBy: 'products')]
-    #[Groups(['product:read','product:write'])]
-    private ?Customer $customer = null;
-
     #[ORM\Column(length: 255)]
     #[Groups(['product:read','product:write'])]
     private ?string $code = null;
@@ -75,9 +71,6 @@ class CatalogPresentation
     #[Groups(['product:read','product:write'])]
     private Collection $attributeValues;
 
-    #[ORM\ManyToOne(inversedBy: 'products')]
-    private ?CatalogCategory $catalogCategory = null;
-
     public function __construct()
     {
         $this->components = new ArrayCollection();
@@ -87,18 +80,6 @@ class CatalogPresentation
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getCustomer(): ?Customer
-    {
-        return $this->customer;
-    }
-
-    public function setCustomer(?Customer $customer): static
-    {
-        $this->customer = $customer;
-
-        return $this;
     }
 
     public function getCode(): ?string
@@ -229,18 +210,6 @@ class CatalogPresentation
                 $value->setProduct(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getCatalogCategory(): ?CatalogCategory
-    {
-        return $this->catalogCategory;
-    }
-
-    public function setCatalogCategory(?CatalogCategory $catalogCategory): static
-    {
-        $this->catalogCategory = $catalogCategory;
 
         return $this;
     }
