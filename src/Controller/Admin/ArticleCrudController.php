@@ -65,6 +65,11 @@ class ArticleCrudController extends AbstractCrudController
     public function configureActions(Actions $actions): Actions
     {
         return $actions
-            ->add(Crud::PAGE_DETAIL, Action::DETAIL);
+            ->add(Crud::PAGE_INDEX, Action::DETAIL)
+            ->reorder(Crud::PAGE_INDEX, [
+                Action::DETAIL,
+                Action::EDIT,
+                Action::DELETE
+            ]);
     }
 }
