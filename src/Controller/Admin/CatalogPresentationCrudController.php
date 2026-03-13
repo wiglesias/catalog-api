@@ -35,10 +35,7 @@ class CatalogPresentationCrudController extends AbstractCrudController
         yield FormField::addColumn(6);
         yield TextField::new('code');
         yield TextField::new('name');
-        yield AssociationField::new('customer');
         yield AssociationField::new('catalog')
-            ->autocomplete();
-        yield AssociationField::new('category')
             ->autocomplete();
         yield CollectionField::new('components')
             ->useEntryCrudForm()
