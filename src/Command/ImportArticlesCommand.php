@@ -16,7 +16,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
     name: 'app:import:articles',
-    description: 'Add a short description for your command',
+    description: 'Import articles from CSV'
 )]
 class ImportArticlesCommand extends Command
 {
@@ -57,25 +57,88 @@ class ImportArticlesCommand extends Command
 
         $handle = fopen($file, 'r');
 
-        // Convertir automáticamente Windows-1252 a UTF-8
-        stream_filter_append($handle, 'convert.iconv.WINDOWS-1252/UTF-8');
+        if (!$handle) {
+            $io->error("No se pudo abrir el CSV");
+            return Command::FAILURE;
+        }
 
         // Detectar delimitador
         $firstLine = fgets($handle);
-        $delimiter = substr_count($firstLine, ';') >= substr_count($firstLine, ',') ? ';' : ',';
+        $firstLine = mb_convert_encoding($firstLine, 'UTF-8', 'UTF-8, Windows-1252, ISO-8859-1');
+
+        $delimiter = substr_count($firstLine, ';') > substr_count($firstLine, ',')
+            ? ';'
+            : ',';
+
         rewind($handle);
 
+        // Leer header
         $header = fgetcsv($handle, 0, $delimiter);
+
+        if (!$header) {
+            $io->error("No se pudo leer la cabecera del CSV");
+            return Command::FAILURE;
+        }
+
+        // Limpiar BOM
         $header[0] = preg_replace('/^\xEF\xBB\xBF/', '', $header[0]);
 
+        // Normalizar header
+        $header = array_map(function ($h) {
+            $h = strtolower(trim($h));
+            $h = preg_replace('/\s+/', '_', $h); // espacios -> _
+            return $h;
+        }, $header);
+
         if ($debug) {
-            $io->note("Delimiter: $delimiter");
+            $io->note("Delimiter: {$delimiter}");
+            $io->note("Header detectado:");
             $io->writeln(implode(' | ', $header));
+        }
+
+        // Mapear columnas por nombre
+        $map = array_flip($header);
+
+        // Permitir alias de columnas
+        $columnAliases = [
+            'code' => ['code', 'article_code', 'codigo'],
+            'name' => ['name', 'article_name', 'nombre'],
+            'unit' => ['unit', 'unidad'],
+            'type' => ['type', 'article_type', 'tipo'],
+        ];
+
+        $columnIndex = [];
+
+        foreach ($columnAliases as $key => $aliases) {
+            foreach ($aliases as $alias) {
+                if (isset($map[$alias])) {
+                    $columnIndex[$key] = $map[$alias];
+                    break;
+                }
+            }
+
+            if (!isset($columnIndex[$key])) {
+                $io->error("Columna requerida '{$key}' no encontrada en CSV.");
+                return Command::FAILURE;
+            }
+        }
+
+        if ($debug) {
+            $io->text("Column mapping:");
+            foreach ($columnIndex as $k => $v) {
+                $io->writeln("$k -> column {$v}");
+            }
+
+            $io->text("Primeras filas:");
 
             for ($i = 0; $i < 5; $i++) {
-                $row = fgetcsv($handle, 0, $delimiter);
-                if (!$row) break;
-                $io->writeln(implode(' | ', $row));
+                $line = fgets($handle);
+                if (!$line) break;
+
+                $line = mb_convert_encoding($line, 'UTF-8', 'UTF-8, Windows-1252, ISO-8859-1');
+                $data = str_getcsv($line, $delimiter);
+
+                $io->writeln(implode(' | ', $data));
             }
 
             fclose($handle);
@@ -85,14 +148,22 @@ class ImportArticlesCommand extends Command
         $io->progressStart();
         $count = 0;
 
-        while (($data = fgetcsv($handle, 0, $delimiter)) !== false) {
+        while (($line = fgets($handle)) !== false) {
 
-            if (count($data) < 4) {
-                $io->warning("Fila incompleta: " . implode(' | ', $data));
+            $line = mb_convert_encoding($line, 'UTF-8', 'UTF-8, Windows-1252, ISO-8859-1');
+            $line = preg_replace('/[\x00-\x1F\x7F]/u', '', $line);
+
+            $data = str_getcsv($line, $delimiter);
+
+            if (!$data || count($data) < 4) {
+                $io->warning("Fila incompleta: " . implode(' | ', $data ?? []));
                 continue;
             }
 
-            [$code, $name, $unitRaw, $typeRaw] = array_map('trim', $data);
+            $code = trim($data[$columnIndex['code']] ?? '');
+            $name = trim($data[$columnIndex['name']] ?? '');
+            $unitRaw = trim($data[$columnIndex['unit']] ?? '');
+            $typeRaw = trim($data[$columnIndex['type']] ?? '');
 
             $unit = UnitType::fromLabel($unitRaw);
             $type = ArticleType::fromLabel($typeRaw);
@@ -111,7 +182,9 @@ class ImportArticlesCommand extends Command
                 ->getRepository(Article::class)
                 ->findOneBy(['code' => $code]);
 
-            if ($existing) continue;
+            if ($existing) {
+                continue;
+            }
 
             $article = new Article();
             $article->setCode($code);
@@ -120,8 +193,9 @@ class ImportArticlesCommand extends Command
             $article->setType($type);
 
             $this->entityManager->persist($article);
-            $io->progressAdvance();
+
             $count++;
+            $io->progressAdvance();
 
             if ($count % self::BATCH_SIZE === 0) {
                 $this->entityManager->flush();

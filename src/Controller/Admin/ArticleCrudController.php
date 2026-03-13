@@ -12,9 +12,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 class ArticleCrudController extends AbstractCrudController
@@ -66,7 +64,7 @@ class ArticleCrudController extends AbstractCrudController
 
     public function configureActions(Actions $actions): Actions
     {
-        return parent::configureActions($actions)
+        return $actions
             ->add(Crud::PAGE_DETAIL, Action::DETAIL);
     }
 }
