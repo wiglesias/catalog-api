@@ -18,21 +18,6 @@ class DashboardController extends AbstractDashboardController
 {
     public function index(): Response
     {
-//        return parent::index();
-//
-//        // Option 1. You can make your dashboard redirect to some common page of your backend
-//        //
-//        // return $this->redirectToRoute('admin_user_index');
-//
-//        // Option 2. You can make your dashboard redirect to different pages depending on the user
-//        //
-//        // if ('jane' === $this->getUser()->getUsername()) {
-//        //     return $this->redirectToRoute('...');
-//        // }
-//
-//        // Option 3. You can render some custom template to display a proper dashboard with widgets, etc.
-//        // (tip: it's easier if your template extends from @EasyAdmin/page/content.html.twig)
-//        //
         return $this->render('admin/dashboard.html.twig');
     }
 
@@ -45,18 +30,18 @@ class DashboardController extends AbstractDashboardController
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
-        yield MenuItem::section('Customers');
-        yield MenuItem::linkTo(CustomerCrudController::class, 'Customers', 'fa fa-building' )->setAction(Crud::PAGE_INDEX);
-        yield MenuItem::linkTo(CatalogCrudController::class, 'Catalogs', 'fa fa-book' )->setAction(Crud::PAGE_INDEX);
-        yield MenuItem::section('Products');
-        yield MenuItem::linkTo(CatalogPresentationCrudController::class, 'Products', 'fa fa-box' )->setAction(Crud::PAGE_INDEX);
-        yield MenuItem::linkTo(CatalogPresentationComponentCrudController::class, 'Components', 'fa fa-list' )->setAction(Crud::PAGE_INDEX);
-        yield MenuItem::section('Articles');
-        yield MenuItem::linkTo(ArticleCrudController::class, 'Articles', 'fa fa-cube' )->setAction(Crud::PAGE_INDEX);
-        yield MenuItem::section('Attributes');
-        yield MenuItem::linkTo(PresentationAttributeCrudController::class, 'Presentation Attributes', 'fa fa-tags')->setAction(Crud::PAGE_INDEX);
-        yield MenuItem::linkTo(PresentationAttributeValueCrudController::class, 'Attribute Values', 'fa fa-list-alt')->setAction(Crud::PAGE_INDEX);
-        yield MenuItem::section('Catalog Categories');
-        yield MenuItem::linkTo(CatalogCategoryCrudController::class,'Categories', 'fa fa-tags');
+        yield MenuItem::section('Clientes');
+        yield MenuItem::linkTo(CustomerCrudController::class, 'Cliente', 'fa fa-building' )->setAction(Crud::PAGE_INDEX);
+        yield MenuItem::linkTo(CatalogCrudController::class, 'Catálogo', 'fa fa-book' )->setAction(Crud::PAGE_INDEX);
+        yield MenuItem::section('Presentaciones');
+        yield MenuItem::linkTo(CatalogPresentationCrudController::class, 'Producto', 'fa fa-box' )->setAction(Crud::PAGE_INDEX);
+        yield MenuItem::linkTo(CatalogPresentationComponentCrudController::class, 'Componentes', 'fa fa-list' )->setAction(Crud::PAGE_INDEX);
+        yield MenuItem::section('Artículos');
+        yield MenuItem::linkTo(ArticleCrudController::class, 'Artículo', 'fa fa-cube' )->setAction(Crud::PAGE_INDEX);
+        yield MenuItem::section('Atributos');
+        yield MenuItem::linkTo(PresentationAttributeCrudController::class, 'Atributos de presentación', 'fa fa-tags')->setAction(Crud::PAGE_INDEX);
+        yield MenuItem::linkTo(PresentationAttributeValueCrudController::class, 'Valores de los atributos', 'fa fa-list-alt')->setAction(Crud::PAGE_INDEX);
+        yield MenuItem::section('Catalog Categorías');
+        yield MenuItem::linkTo(CatalogCategoryCrudController::class,'Categoría', 'fa fa-tags');
     }
 }
