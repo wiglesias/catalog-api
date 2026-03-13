@@ -6,8 +6,7 @@ use App\Entity\Customer;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\SlugField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 
 class CustomerCrudController extends AbstractCrudController
@@ -20,7 +19,8 @@ class CustomerCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         yield TextField::new('name');
-        yield TextField::new('slug');
+        yield SlugField::new('slug')
+            ->setTargetFieldName('name');
         yield CollectionField::new('catalogs')
             ->useEntryCrudForm()
             ->setEntryIsComplex(true)

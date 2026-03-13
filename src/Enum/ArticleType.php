@@ -40,30 +40,30 @@ enum ArticleType: string
             self::GRAPE_SEED_OIL => 'ACEITE DE GRANILLA DE UVA',
             self::OLIVE_POMACE_OIL => 'ACEITE DE ORUJO',
             self::VINEGAR => 'VINAGRE',
-            self::FATTY_ACIDS => 'ACIDOS GRASOS',
+            self::FATTY_ACIDS => 'ÁCIDOS GRASOS',
             self::MISC_PEPE => 'VARIOS PEPE 20160224',
-            self::OLEINS => 'OLEINAS',
+            self::OLEINS => 'OLEÍNAS',
             self::OTHER_FATTY_MATERIALS => 'OTRAS MATERIAS GRASAS',
-            self::NEUTRALIZATION_PASTES => 'PASTAS DE NEUTRALIZACION',
-            self::REFINERY_AUXILIARY => 'MAT.AUXILIARES REFINERIA',
-            self::PLANT_AUXILIARY => 'MAT.AUXILIARES PLANTA ENVASADO',
+            self::NEUTRALIZATION_PASTES => 'PASTAS DE NEUTRALIZACIÓN',
+            self::REFINERY_AUXILIARY => 'MAT. AUXILIARES REFINERÍA',
+            self::PLANT_AUXILIARY => 'MAT. AUXILIARES PLANTA ENVASADO',
             self::CANS => 'LATAS',
-            self::PROMOTIONAL_CATALOGS => 'CATALOGOS PROMOCIONALES',
+            self::PROMOTIONAL_CATALOGS => 'CATÁLOGOS PROMOCIONALES',
             self::BOXES => 'CAJAS',
             self::LABELS => 'ETIQUETAS',
-            self::PLASTIC_CARBOYS => 'BOMBONAS DE PLASTICO',
-            self::PLASTIC_BOTTLES => 'BOTELLAS DE PLASTICO',
+            self::PLASTIC_CARBOYS => 'BOMBONAS DE PLÁSTICO',
+            self::PLASTIC_BOTTLES => 'BOTELLAS DE PLÁSTICO',
             self::GLASS_BOTTLES => 'BOTELLAS DE VIDRIO',
             self::PALLETS => 'PALETS',
             self::DRUMS => 'BIDONES',
             self::CONTAINERS => 'CONTENEDORES',
             self::KITCHEN_CLOTHING => 'ROPA DE COCINA',
-            self::WOODEN_KITCHEN_ITEMS => 'ARTICULOS DE COCINA DE MADERA',
+            self::WOODEN_KITCHEN_ITEMS => 'ARTÍCULOS DE COCINA DE MADERA',
             self::CORK_MANUFACTURES => 'MANUFACTURAS CORCHO',
             self::OLIVE_OIL_MINIATURES => 'MINIATURAS DE ACEITE DE OLIVA',
             self::DVDS => "DVD'S",
-            self::PLASTIC_KITCHEN_ITEMS => 'ARTICULOS COCINA PLASTICO',
-            self::FRIDGE_MAGNETS => 'MAGNETICOS NEVERA',
+            self::PLASTIC_KITCHEN_ITEMS => 'ARTÍCULOS COCINA PLÁSTICO',
+            self::FRIDGE_MAGNETS => 'MAGNÉTICOS NEVERA',
         };
     }
 
@@ -80,37 +80,3 @@ enum ArticleType: string
         return null;
     }
 }
-
-//enum ArticleType: string
-//{
-//    case RAW_MATERIAL = 'raw_material';   // El aceite
-//    case PACKAGING = 'packaging';         // La botella
-//    case COMPONENT = 'component';         // Tapones y etiquetas
-//    case LABEL = 'label';         // Tapones y etiquetas
-//    case SHIPPING_MATERIAL = 'shipping_material'; // La caja de cartón (Embalaje)
-//    case FINISHED_PRODUCT = 'finished_product';   // Producto 4689 completo
-//
-//    public function label(): string
-//    {
-//        return match ($this) {
-//            self::RAW_MATERIAL => 'MATERIA PRIMA',
-//            self::PACKAGING => 'ENVASE',
-//            self::COMPONENT => 'COMPONENTE',
-//            self::LABEL => 'ETIQUETA',
-//            self::SHIPPING_MATERIAL => 'EMBALAJE',
-//            self::FINISHED_PRODUCT => 'PRODUCTO TERMINADO',
-//        };
-//    }
-//
-//    public static function choices(): array
-//    {
-//        return [
-//            'raw_material' => self::RAW_MATERIAL,
-//            'packaging' => self::PACKAGING,
-//            'component' => self::COMPONENT,
-//            'label' => self::LABEL,
-//            'shipping_material' => self::SHIPPING_MATERIAL,
-//            'finished_product' => self::FINISHED_PRODUCT,
-//        ];
-//    }
-//}
